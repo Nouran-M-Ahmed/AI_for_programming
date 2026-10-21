@@ -1,0 +1,148 @@
+1. Activate GITHUB environemnt
+source ~/.bashrc
+conda activate GITHUB
+
+2. Change into AI_for_programming environment
+cd AI_for_programming
+
+2. Create directory copilot_practical with input, tmp, results and scripts sub-directory 
+mkdir -p copilot_practical/{input,tmp,results,scripts}
+
+# The content of tmp and results will be ignored by gitignore so scripts is created and it be tracked by git.
+
+3. Create a WHATIDID.txt file in copilot_practical directory
+touch copilot-practical/WHATIDID.txt
+
+4. Chnage into copilot_practical directory
+cd copilot_practical
+
+5. Install Ollama open-weight LLM and check its version
+conda install -c conda-forge ollama -y
+ollama --version
+
+6. Investigate Ollama
+ollama --help
+ollama run --help
+
+7. Open a new terminal to have a server terminal
+
+8. Activate GITHUB environment in the server terimal and start the server
+source ~/.bashrc
+conda activate GITHUB
+ollama serve
+
+9. Go back to the wrorking terminal
+
+10. Check the available disk space for your user's home directory is at least 6GB
+df -h ~
+# df is disk free, h is human readable and ~ is home directory
+
+11. Download the Ollama model (qwen2.5-coder:7b)
+ollama pull qwen2.5-coder:7b
+
+12. Ensure the desired model is downloaded 
+ollama list
+
+13. Run Ollama model by start an interactive chat 
+ollama run qwen2.5-coder:7b
+Prompt "Write a Python function translate(seq) that translates a nucleic acid
+sequence into a protein sequence using the standard codon table."
+
+14. Leave server
+/bye
+
+15. Create a translate_dna.py python file and paste the Ollama response into it
+touch ./scripts/translate_dna.py
+
+16. Explore token consumption by giving a random prompt "What is the central dogma of biology?"
+ollama run qwen2.5-coder:7b --verbose
+
+17. Investigate performance when changing the temperature parameter
+
+18. Set temperature parameter to 1
+/set parameter temperature 1
+
+19. Give the prompt "Create a python script to take in an assembly fasta file and calculate the N50 and GC content of all scaffolds present."
+
+20. Remove session context
+/clear
+
+21. Set temperature parameter to 0
+/set parameter temperature 0
+
+22. Give the same prompt in step 19 to investigate how the response changes
+# The previous response to the prompt in step 19 (/set parameter temperature 0) is almost identical to the previous response with (/set parameter temperature 0) with only minor changes.
+
+23. Install Github Copilot CLI via website instructions
+winget install GitHub.Copilot (on my machine)
+curl -fsSL https://gh.io/copilot-install | bash (on QMUL jupyter)
+
+24. Get copilot started
+export PATH="/home/jovyan/.local/bin:$PATH" && copilot help
+
+25. Run copilot
+copilot
+
+26. Check which model is running.
+# Auto -BALANCED-
+
+27. Run a prompt "What does the following command do? 
+grep -E '^chr1[[:space:]].*gene_name=BRCA1' GRCh38.gff > brca1.gff"
+
+28. Leave copilot
+/leave
+
+29. Use copilot without running copilot using the (copilot -p) command
+copilot -p "In two sentences, explain what samtools flagstat reports."
+
+# Copilot CLI can be used as a one-shot command (copilot -p "your prompt", non-interactive) or as an interactive session (running copilot and having a multi-turn conversation). 
+
+30. Create a reverse_complement.py in the scripts directory and edit file
+touch scrpits/reverse_complement.py
+nano scrpits/reverse_complement.py
+
+31. Start copilot
+copilot
+
+32. Identify the bugs in the reverse_complement.py file with copilot and apporve edits to file
+Please review the ./scripts/reverse_complement.py, identify any bugs and fix.
+
+33. Add basic error handling
+Add a check to reverse_complement() that raises a ValueError with a
+clear message if the sequence contains any character not in "ATCG". This update should implement the standard try and except statements
+
+34. Test that it actually works on a sequence containing an N
+printf ">bad_seq\nATGNNCGA\n" > input/bad_seq.fasta
+python3 scripts/reverse_complement.py input/bad_seq.fasta
+
+35. Give the following bounded brief to copilot in a single message
+Create a Python script called gc_content.py in scripts/ that:
+1. Takes a FASTA file path as a command-line argument.
+2. Reads all sequences in the file (it may contain multiple records).
+3. For each record, prints its header and its GC content as a percentage,
+   rounded to 2 decimal places.
+4. Includes a small docstring and handles the case of an empty sequence
+   (skip it with a warning, don't crash).
+Do not add any other files or dependencies outside the Python standard library.
+
+36. Create a small multi-record test file and run the generated script
+printf ">seq1\nGGGGCCCCAA\n>seq2\nATATATATAT\n>seq3\n\n" > input/multi_seq.fasta
+python3 scripts/gc_content.py input/multi_seq.fasta
+
+37. Give Copilot CLI one small follow-up instruction to extend the script
+Add an option --min-gc <float> that only prints records with GC content
+above that threshold.
+
+38. Test it with different GC thresholds of 50 and 80
+python3 scripts/gc_content.py input/multi_seq.fasta --min-gc 50
+python3 scripts/gc_content.py input/multi_seq.fasta --min-gc 80
+
+39. Ask Copilot CLI to write a short summary of what gc_content.py does, suitable for pasting into a lab notebook or README
+Write a short markdown summary (max 150 words) of gc_content.py
+for a lab notebook, covering its inputs, outputs, and the new
+--min-gc option. Do not restate the whole code.
+
+40. Exit copilot
+/leave
+
+41. 
